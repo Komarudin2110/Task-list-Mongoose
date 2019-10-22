@@ -24,7 +24,11 @@ export class Home extends Component {
                 })
             this.componentDidMount()
         } catch (error) {
-            alert('err')
+            Swal.fire(
+                'ERROR!',
+                error.message,
+                'error'
+            )
         }
     }
 
@@ -36,7 +40,11 @@ export class Home extends Component {
                 })
             this.componentDidMount()
         } catch (error) {
-            alert('err')
+            Swal.fire(
+                'ERROR!',
+                error.message,
+                'error'
+            )
         }
     }
 
@@ -82,24 +90,13 @@ export class Home extends Component {
             this.task.value = ''
             this.componentDidMount()
         } catch (error) {
-
+            Swal.fire(
+                'ERROR!',
+                error.message,
+                'error'
+            )
         }
     }
-
-    // submitTask = () => {
-    //     let userID = this.props._id
-    //     let taskToDo = this.task.value
-    //     axios.post(
-    //         `/task/${userID}`,
-    //         {
-    //             description: taskToDo
-    //         }
-    //     ).then(res => {
-    //         this.task.value = ''
-    //         this.componentDidMount()
-    //     })
-    // }
-
 
     showTask = () => {
         let rendTask = this.state.taskUser.map(val => {
@@ -163,7 +160,6 @@ export class Home extends Component {
                                 </thead>
                                 <tbody>
                                     {this.showTask()}
-
                                 </tbody>
                             </Table>
                         </Card>

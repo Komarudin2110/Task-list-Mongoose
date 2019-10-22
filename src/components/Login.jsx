@@ -10,33 +10,41 @@ import { connect } from 'react-redux'
 
 
 export class Login extends Component {
-    loginSubmit = () => {
+    loginSubmit = async () => {
         let email_ = this.email.value
         let password_ = this.password.value
-        axios.post(
-            'users/login',
-            {
-                email: email_,
-                password: password_
-            }
-        ).then(res => {
-
-            if (res.data.err) {
-                return (Swal.fire(
-                    'Login Gagal',
-                    `${res.data.err}`,
-                    'error'
-                ))
-            }
-            let { username, _id } = res.data
-            localStorage.setItem('user', JSON.stringify({ username, _id }))
-            this.props.sendData(username, _id)
-            Swal.fire(
-                'Register Berhasil',
-                'Selamat Datang !',
-                'success'
+        try {
+            await axios.post(
+                'users/login',
+                {
+                    email: email_,
+                    password: password_
+                }
             )
-        })
+                .then(res => {
+                    if (res.data.err) {
+                        return (Swal.fire(
+                            'Login Gagal',
+                            `${res.data.err}`,
+                            'error'
+                        ))
+                    }
+                    let { username, _id } = res.data
+                    localStorage.setItem('user', JSON.stringify({ username, _id }))
+                    this.props.sendData(username, _id)
+                    Swal.fire(
+                        'Register Berhasil',
+                        'Selamat Datang !',
+                        'success'
+                    )
+                })
+        } catch (error) {
+            Swal.fire(
+                'ERROR!',
+                error.message,
+                'error'
+            )
+        }
     }
 
     render() {

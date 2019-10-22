@@ -6,42 +6,44 @@ import { Link, Redirect } from "react-router-dom";
 import { connect } from 'react-redux';
 export class Register extends Component {
 
-    registSubmit = () => {
-        console.log('oke');
+    registSubmit = async () => {
         let username_ = this.username.value
         let name_ = this.name.value
         let age_ = this.age.value
         let email_ = this.email.value
         let password_ = this.password.value
-
-        axios.post(
-            '/users',
-            {
-                username: username_,
-                name: name_,
-                age: age_,
-                email: email_,
-                password: password_
-            }
-        ).then(res => {
-            if (res.data.err) {
-                return (Swal.fire(
-                    'Register Gagal',
-                    `${res.data.err}`,
-                    'error'
-                ))
-            }
+        try {
+            await axios.post(
+                '/users',
+                {
+                    username: username_,
+                    name: name_,
+                    age: age_,
+                    email: email_,
+                    password: password_
+                }
+            ).then(res => {
+                if (res.data.err) {
+                    return (Swal.fire(
+                        'Register Gagal',
+                        `${res.data.err}`,
+                        'error'
+                    ))
+                }
+                Swal.fire(
+                    'Register Berhasil',
+                    'Selamat Datang !',
+                    'success'
+                )
+            })
+        } catch (error) {
             Swal.fire(
-                'Register Berhasil',
-                'Selamat Datang !',
-                'success'
+                'ERROR!',
+                error.message,
+                'error'
             )
-        }).catch(err => {
-            console.log(err);
-
-        })
+        }
     }
-
 
     render() {
         if (!this.props.getId) {
