@@ -15,6 +15,7 @@ export class Home extends Component {
         taskUser: [],
     }
 
+    // Fn jika task telah selesai
     doneTask = async (taskId) => {
         try {
             await axios.patch(`/task/update/${taskId}`,
@@ -27,7 +28,7 @@ export class Home extends Component {
         }
     }
 
-    shyTask = async (taskId) => {
+    cancelTask = async (taskId) => {
         try {
             await axios.patch(`/task/update/${taskId}`,
                 {
@@ -42,22 +43,21 @@ export class Home extends Component {
     doubleClick = async (taskId) => {
         try {
             const result = await Swal.fire({
-                title: 'Are you sure?',
-                text: "You won't be able to revert this!",
+                title: 'Hapus task ini ?',
+                text: "",
                 type: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!'
+                confirmButtonText: 'Iya !'
             })
             if (result.value) {
                 console.log(taskId);
-
                 await axios.delete(`/task/${taskId}`)
                 this.componentDidMount()
                 Swal.fire(
-                    'Deleted!',
-                    'Your file has been deleted.',
+                    'Task berhasil di hapus!',
+                    '',
                     'success'
                 )
             }
@@ -70,19 +70,35 @@ export class Home extends Component {
         }
     }
 
-    submitTask = () => {
+    submitTask = async () => {
         let userID = this.props._id
         let taskToDo = this.task.value
-        axios.post(
-            `/task/${userID}`,
-            {
-                description: taskToDo
-            }
-        ).then(res => {
+        try {
+            await axios.post(
+                `/task/${userID}`,
+                {
+                    description: taskToDo
+                })
             this.task.value = ''
             this.componentDidMount()
-        })
+        } catch (error) {
+
+        }
     }
+
+    // submitTask = () => {
+    //     let userID = this.props._id
+    //     let taskToDo = this.task.value
+    //     axios.post(
+    //         `/task/${userID}`,
+    //         {
+    //             description: taskToDo
+    //         }
+    //     ).then(res => {
+    //         this.task.value = ''
+    //         this.componentDidMount()
+    //     })
+    // }
 
 
     showTask = () => {
@@ -101,7 +117,7 @@ export class Home extends Component {
                 <tr onDoubleClick={() => { this.doubleClick(val._id) }} className="text-center">
                     <td><strike><i>{val.description}</i></strike></td>
                     <td>
-                        <Button variant="danger" onClick={() => { this.shyTask(val._id) }} className="mr-3">Cancel</Button>
+                        <Button variant="danger" onClick={() => { this.cancelTask(val._id) }} className="mr-3">Cancel</Button>
                     </td>
                 </tr>
             )
