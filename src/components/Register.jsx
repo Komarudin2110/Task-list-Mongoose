@@ -49,7 +49,7 @@ export class Register extends Component {
         if (!this.props.getId) {
             return (
                 <div>
-                    <Card style={{ width: '30rem' }} className="mx-auto mt-5 p-4">
+                    <Card className="mx-auto mt-5 p-4 col-12 col-sm-5 col-md-5">
                         <h1>Register</h1>
                         <hr className="w-25"></hr>
                         <Form>

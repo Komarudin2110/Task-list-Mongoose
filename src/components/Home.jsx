@@ -135,8 +135,8 @@ export class Home extends Component {
         if (this.props._id) {
             return (
                 <div className="row container mt-5 ">
-                    <div className="col-5">
-                        <Card style={{ width: '20rem' }} className=" ml-5 p-2">
+                    <div className="col-12 col-md-5">
+                        <Card style={{ width: '90%' }} className="p-2 ml-4">
                             <Card>
                                 <h2 className="mx-auto mt-3">Input Task !</h2>
                                 <hr className="w-50 mx-auto"></hr>
@@ -145,12 +145,12 @@ export class Home extends Component {
                                         <Form.Control ref={(input) => this.task = input} type="text" placeholder="What do you want to do ?" />
                                     </Form.Group>
                                 </Form>
-                                <Button onClick={this.submitTask} style={{ width: '15rem' }} variant="info" className="mb-3 mx-auto">Up !</Button>
+                                <Button onClick={this.submitTask} style={{ width: '40%' }} variant="info" className="mb-3 mx-auto">Up !</Button>
                             </Card>
                         </Card>
                     </div>
-                    <div className="col-6">
-                        <Card style={{ width: '45rem' }} className=" p-2">
+                    <div className="col-9 col-md-6">
+                        <Card style={{ width: '150%' }} className=" p-2">
                             <Table striped bordered hover>
                                 <thead className="text-center">
                                     <tr>
