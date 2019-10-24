@@ -145,7 +145,7 @@ export class Home extends Component {
                                         <Form.Control ref={(input) => this.task = input} type="text" placeholder="What do you want to do ?" />
                                     </Form.Group>
                                 </Form>
-                                <Button onClick={this.submitTask} style={{ width: '40%' }} variant="info" className="mb-3 mx-auto">Up !</Button>
+                                <Button onClick={this.submitTask} style={{ width: '40%' }} variant="secondary" className="mb-3 mx-auto">Up !</Button>
                             </Card>
                         </Card>
                     </div>

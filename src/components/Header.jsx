@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Navbar, Nav, NavDropdown, Button } from "react-bootstrap"
+import { Navbar, Nav, Dropdown, Button, NavDropdown } from "react-bootstrap"
 import {
     Link
 } from "react-router-dom";
@@ -17,12 +17,27 @@ export class Header extends Component {
             )
         } else {
             return (
-                <Nav className="ml-auto mr-5">
-                    <Link to="/"><Button variant="outline" className="mr-3 mb-1 text-white">Task</Button></Link>
-                    <NavDropdown title={"Hello, " + this.props.getUsername} className="text-white" id="collasible-nav-dropdown">
-                        <NavDropdown.Item onClick={this.props.logoutAcc}>Log Out</NavDropdown.Item>
-                    </NavDropdown>
+                <Nav className="ml-auto mr-1">
+                    <Link to="/"><Button variant="outline" className="mr-4 mb-1 text-white">Task</Button></Link>
+                    <Dropdown className="ml-auto mr-5">
+                        <Dropdown.Toggle variant="secondary" id="dropdown-basic">
+                            Hello , {this.props.getUsername}
+                        </Dropdown.Toggle>
+                        <Dropdown.Menu>
+                            <Link to="/profile" className="dropdown-item" >Profile</Link>
+                            <Link to="/Edit-profile" className="dropdown-item">Edit Profile</Link>
+                            <Dropdown.Divider />
+                            <NavDropdown.Item className="mx-auto" onClick={this.props.logoutAcc}>Log Out</NavDropdown.Item>
+                        </Dropdown.Menu>
+                    </Dropdown>
                 </Nav>
+                // <Nav className="ml-auto mr-5">
+                //     <Link to="/"><Button variant="outline" className="mr-3 mb-1 text-white">Task</Button></Link>
+                //     <NavDropdown title={"Hello, " + this.props.getUsername} id="collasible-nav-dropdown">
+                //         <Link to="/profile"><Button variant="outline" className="mb-1 ml-2">Profile</Button></Link>
+                //         <NavDropdown.Item className="mx-auto" onClick={this.props.logoutAcc}>Log Out</NavDropdown.Item>
+                //     </NavDropdown>
+                // </Nav>
 
             )
         }
@@ -31,7 +46,7 @@ export class Header extends Component {
     render() {
         return (
             <div>
-                <Navbar bg="primary" expand="lg">
+                <Navbar bg="dark" expand="lg">
                     <Navbar.Brand className="ml-5 text-white" href="/">React-Mongoose</Navbar.Brand>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav">
