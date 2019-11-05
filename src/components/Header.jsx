@@ -1,8 +1,6 @@
 import React, { Component } from 'react'
 import { Navbar, Nav, Dropdown, Button, NavDropdown } from "react-bootstrap"
-import {
-    Link
-} from "react-router-dom";
+import {Link} from "react-router-dom";
 import { connect } from 'react-redux'
 import { logoutAcc } from '../Actions/index'
 
