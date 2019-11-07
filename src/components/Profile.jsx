@@ -12,7 +12,7 @@ export class Profile extends Component {
     }
 
     componentDidMount() {
-        axios.get(`/users/${this.props._id}`)
+        axios.get(`/users/profile/${this.props.username}`)
             .then(res => {
                 this.setState({ takeProfile: res.data })
             })
@@ -22,18 +22,18 @@ export class Profile extends Component {
     }
 
     render() {
-        if (this.props._id) {
+        if (this.props.id) {
             if (!isNull(this.state.takeProfile)) {
-                let { user, avatar } = this.state.takeProfile
-                console.log(avatar);
+                let profile = this.state.takeProfile
+                console.log(profile);
 
                 return (
                     <div>
                         <Card className="p-3 mt-5 mx-auto" style={{ width: '40rem' }}>
                             <Card className="text-center">
-                                <img className="mx-auto d-block mt-5 rounded-circle mb-4" src={avatar} alt="" />
-                                <h1>Hello, {user.name}</h1>
-                                <p>{user.name} | {user.age} | {user.email}</p>
+                                <img className="mx-auto d-block mt-5 rounded-circle mb-4" src={profile.avatar} alt="" />
+                                <h1>Hello, {profile.username}</h1>
+                                <p>{profile.name} | {profile.age} | {profile.email}</p>
                             </Card>
                         </Card>
                     </div>
@@ -48,7 +48,8 @@ export class Profile extends Component {
 
 const mapStateToProps = state => {
     return {
-        _id: state.auth._id
+        id: state.auth.id,
+        username: state.auth.username
     }
 }
 

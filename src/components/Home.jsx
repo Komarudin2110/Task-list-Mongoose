@@ -18,7 +18,7 @@ export class Home extends Component {
     // Fn jika task telah selesai
     doneTask = async (taskId) => {
         try {
-            await axios.patch(`/task/update/${taskId}`,
+            await axios.patch(`/update/${taskId}`,
                 {
                     completed: true
                 })
@@ -34,7 +34,7 @@ export class Home extends Component {
 
     cancelTask = async (taskId) => {
         try {
-            await axios.patch(`/task/update/${taskId}`,
+            await axios.patch(`/update/${taskId}`,
                 {
                     completed: false
                 })
@@ -61,7 +61,7 @@ export class Home extends Component {
             })
             if (result.value) {
                 console.log(taskId);
-                await axios.delete(`/task/${taskId}`)
+                await axios.delete(`/delete/${taskId}`)
                 this.componentDidMount()
                 Swal.fire(
                     'Task berhasil di hapus!',
@@ -79,12 +79,13 @@ export class Home extends Component {
     }
 
     submitTask = async () => {
-        let userID = this.props._id
+        let userID = this.props.id
         let taskToDo = this.task.value
         try {
             await axios.post(
-                `/task/${userID}`,
+                `/tasks/create`,
                 {
+                    user_id: userID,
                     description: taskToDo
                 })
             this.task.value = ''
@@ -102,19 +103,19 @@ export class Home extends Component {
         let rendTask = this.state.taskUser.map(val => {
             if (!val.completed) {
                 return (
-                    <tr onDoubleClick={() => { this.doubleClick(val._id) }} className="text-center">
+                    <tr onDoubleClick={() => { this.doubleClick(val.id) }} className="text-center">
                         <td>{val.description}</td>
                         <td>
-                            <Button variant="success" onClick={() => { this.doneTask(val._id) }} className="mr-3">Done</Button>
+                            <Button variant="success" onClick={() => { this.doneTask(val.id) }} className="mr-3">Done</Button>
                         </td>
                     </tr>
                 )
             }
             return (
-                <tr onDoubleClick={() => { this.doubleClick(val._id) }} className="text-center">
+                <tr onDoubleClick={() => { this.doubleClick(val.id) }} className="text-center">
                     <td><strike><i>{val.description}</i></strike></td>
                     <td>
-                        <Button variant="danger" onClick={() => { this.cancelTask(val._id) }} className="mr-3">Cancel</Button>
+                        <Button variant="danger" onClick={() => { this.cancelTask(val.id) }} className="mr-3">Cancel</Button>
                     </td>
                 </tr>
             )
@@ -123,16 +124,16 @@ export class Home extends Component {
     }
 
     componentDidMount() {
-        let userID = this.props._id
+        let userID = this.props.id
         axios.get(
-            `/task/${userID}`
+            `/tasks/${userID}`
         ).then((res) => {
             this.setState({ taskUser: res.data })
         })
     }
 
     render() {
-        if (this.props._id) {
+        if (this.props.id) {
             return (
                 <div className="row container mt-5 ">
                     <div className="col-12 col-md-5">
@@ -174,8 +175,8 @@ export class Home extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        _id: state.auth._id,
-        _username: state.auth.username
+        id: state.auth.id,
+        username: state.auth.username
     }
 }
 export default connect(mapStateToProps)(Home)

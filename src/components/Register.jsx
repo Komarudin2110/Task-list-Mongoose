@@ -9,7 +9,6 @@ export class Register extends Component {
     registSubmit = async () => {
         let username_ = this.username.value
         let name_ = this.name.value
-        let age_ = this.age.value
         let email_ = this.email.value
         let password_ = this.password.value
         try {
@@ -18,15 +17,14 @@ export class Register extends Component {
                 {
                     username: username_,
                     name: name_,
-                    age: age_,
                     email: email_,
                     password: password_
                 }
             ).then(res => {
-                if (res.data.err) {
+                if (res.data.error) {
                     return (Swal.fire(
                         'Register Gagal',
-                        `${res.data.err}`,
+                        `${res.data.error}`,
                         'error'
                     ))
                 }
@@ -62,10 +60,6 @@ export class Register extends Component {
                                 <Form.Control ref={(input) => this.name = input} type="text" placeholder="Enter Name" />
                             </Form.Group>
                             <Form.Group>
-                                <Form.Label>Age</Form.Label>
-                                <Form.Control ref={(input) => this.age = input} type="number" placeholder="Enter Age" />
-                            </Form.Group>
-                            <Form.Group>
                                 <Form.Label>E-mail</Form.Label>
                                 <Form.Control ref={(input) => this.email = input} type="email" placeholder="Enter E-mail" />
                             </Form.Group>
@@ -92,7 +86,7 @@ export class Register extends Component {
 
 const mapStateToProps = state => {
     return {
-        getId: state.auth._id,
+        getId: state.auth.id,
         getUsername: state.auth.username
     }
 }

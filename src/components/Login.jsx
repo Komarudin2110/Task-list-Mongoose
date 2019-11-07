@@ -17,21 +17,22 @@ export class Login extends Component {
             await axios.post(
                 'users/login',
                 {
-                    email: email_,
+                    userlogin: email_,
                     password: password_
                 }
             )
                 .then(res => {
-                    if (res.data.err) {
+                    console.log(res);
+                    if (res.data.error) {
                         return (Swal.fire(
                             'Login Gagal',
-                            `${res.data.err}`,
+                            `${res.data.error}`,
                             'error'
                         ))
                     }
-                    let { username, _id } = res.data
-                    localStorage.setItem('user', JSON.stringify({ username, _id }))
-                    this.props.sendData(username, _id)
+                    let { username, id } = res.data.user
+                    localStorage.setItem('user', JSON.stringify({ username, id }))
+                    this.props.sendData(username, id)
                     Swal.fire(
                         'Register Berhasil',
                         'Selamat Datang !',
@@ -48,7 +49,7 @@ export class Login extends Component {
     }
 
     render() {
-        if (!this.props._id) {
+        if (!this.props.id) {
             return (
                 <div>
                     <Card className="mx-auto mt-5 p-4 col-12 col-sm-5 col-md-5">
@@ -82,8 +83,8 @@ export class Login extends Component {
 }
 const mapStateToProps = (state) => {
     return {
-        _id: state.auth._id,
-        _username: state.auth.username
+        id: state.auth.id,
+        username: state.auth.username
     }
 }
 

@@ -4,16 +4,17 @@ import { connect } from 'react-redux'
 import { Card, Form, Button } from 'react-bootstrap'
 import { isNull } from 'util'
 import Swal from 'sweetalert2'
-import { Link, Redirect } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 
 
 export class EditProfile extends Component {
     state = {
-        profile: null
+        profile: null,
+        avatarName: ''
     }
 
     componentDidMount() {
-        axios.get(`/users/${this.props._id}`)
+        axios.get(`/users/profile/${this.props.username}`)
             .then(res => {
                 this.setState({ profile: res.data })
             })
@@ -22,27 +23,28 @@ export class EditProfile extends Component {
             })
     }
 
+    changeAvatar = () => {
+        this.setState({ avatarName: this.avatar.files[0].name })
+    }
+
     updateProfile = () => {
-        let dataForm = new FormData()
+        let formData = new FormData()
+        let _name = this.name.value
+        let _email = this.email.value
+        let _password = this.password.value
+        let _avatar = this.avatar.files[0]
 
-        let name_ = this.name.value
-        let email_ = this.email.value
-        let age_ = this.age.value
-        let password_ = this.password.value
-        let avatar_ = this.avatar.files[0]
+        formData.append("name", _name)
+        formData.append("email", _email)
+        if (_password) formData.append("password", _password)
+        if (_avatar) formData.append("avatar", _avatar)
 
-        dataForm.append("name", name_)
-        dataForm.append("email", email_)
-        dataForm.append("age", age_)
-        dataForm.append("password", password_)
-        dataForm.append("avatar", avatar_)
-
-        axios.patch(`/users/${this.props._id}`, dataForm)
+        axios.patch(`/users/${this.props.username}`, formData)
             .then(res => {
-                if (res.data._message) {
+                if (res.data.error) {
                     return (Swal.fire(
                         'ERROR !',
-                        res.data._message,
+                        res.data.error,
                         'error'
                     ))
                 }
@@ -50,22 +52,22 @@ export class EditProfile extends Component {
                     'Profile Updated !',
                     'Yeay',
                     'success'
-                ).then(res => {
-                    setTimeout("location.reload(true)", 100)
-                })
+                )
             }).catch(err => {
                 Swal.fire(
                     'ERROR !',
-                    err.message,
+                    err.sqlMessage,
                     'error'
                 )
             })
     }
 
+
+
     render() {
-        if (this.props._id) {
+        if (this.props.username) {
             if (!isNull(this.state.profile)) {
-                let { name, email, age } = this.state.profile.user
+                let { name, email } = this.state.profile
                 return (
                     <div>
                         <Card className="p-3 mt-4 mx-auto" style={{ width: '60rem' }}>
@@ -80,15 +82,12 @@ export class EditProfile extends Component {
                                         <h5>Email</h5>
                                         <input ref={(input) => this.email = input} className="form-control" defaultValue={email} type="email" />
 
-                                        <h5>Age</h5>
-                                        <input ref={(input) => this.age = input} className="form-control" defaultValue={age} type="text" />
-
                                         <h5>Password</h5>
                                         <input ref={(input) => this.password = input} className="form-control" placeholder="Password" type="password" />
 
                                         <div className="custom-file mt-4">
-                                            <input ref={(input) => this.avatar = input} id="customFileLang" className="custom-file-input" type="file" />
-                                            <label className="custom-file-label" htmlFor="customFileLang">Please insert file</label>
+                                            <input onChange={this.changeAvatar} ref={(input) => this.avatar = input} id="customFileLang" className="custom-file-input" type="file" />
+                                            <label className="custom-file-label" htmlFor="customFileLang">{this.state.avatarName ? this.state.avatarName : "Choose File"}</label>
                                         </div>
 
                                     </form>
@@ -107,7 +106,8 @@ export class EditProfile extends Component {
 
 const mapStateToProps = state => {
     return {
-        _id: state.auth._id
+        id: state.auth.id,
+        username: state.auth.username
     }
 }
 
